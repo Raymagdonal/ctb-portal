@@ -1,0 +1,6 @@
+{
+  "name": "CTB Portal - Chao Phraya Tourist Boat",
+  "description": "ระบบศูนย์รวมลิงก์ Google Apps Script และระบบงานภายในองค์กร บริษัท เจ้าพระยาทัวร์ริสท์โบ๊ท จำกัด",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
