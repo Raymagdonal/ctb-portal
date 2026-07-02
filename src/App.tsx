@@ -307,44 +307,46 @@ export default function App() {
             </div>
           ) : groupStyle === 'style3' ? (
             /* Style 3: Sidebar Split */
-            <div className="glass border border-white/15 shadow-2xl animate-fade-in rounded-3xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
-              <div className="w-full md:w-80 bg-slate-950/60 p-4 border-b md:border-b-0 md:border-r border-white/10 space-y-1.5 shrink-0">
-                <div className="px-3 py-2 text-xs font-bold tracking-wider uppercase text-blue-400">
+            <div className="glass mx-auto max-w-6xl border border-white/15 shadow-2xl animate-fade-in rounded-3xl overflow-hidden flex flex-col md:flex-row min-h-[560px]">
+              <div className="w-full md:w-80 bg-slate-950/95 p-5 md:p-6 border-b md:border-b-0 md:border-r border-white/10 space-y-2 shrink-0 shadow-xl">
+                <div className="px-2 py-2 text-xs font-semibold tracking-wider uppercase text-cyan-200">
                   หมวดแผนกงาน ({DEPARTMENTS.length})
                 </div>
-                {DEPARTMENTS.map((dept) => {
-                  const deptLinks = filteredLinks.filter((l) => l.departmentId === dept.id);
-                  if (deptLinks.length === 0) return null;
-                  const isActive = (activeSidebarDept || 'company') === dept.id;
-                  return (
-                    <button
-                      key={dept.id}
-                      onClick={() => setActiveSidebarDept(dept.id)}
-                      className={`w-full p-3 rounded-2xl flex items-center justify-between text-left transition-all ${
-                        isActive
-                          ? 'bg-gradient-to-r from-blue-600/40 to-cyan-500/20 border border-blue-400/40 text-white shadow-lg shadow-blue-500/10 pl-4'
-                          : 'hover:bg-white/5 text-blue-200/70 border border-transparent'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className={`p-2 rounded-xl bg-gradient-to-r ${dept.themeColor.gradient} text-white shrink-0`}>
-                          <IconRenderer name={dept.iconName} className="w-4 h-4" />
+                <div className="space-y-2">
+                  {DEPARTMENTS.map((dept) => {
+                    const deptLinks = filteredLinks.filter((l) => l.departmentId === dept.id);
+                    if (deptLinks.length === 0) return null;
+                    const isActive = (activeSidebarDept || 'company') === dept.id;
+                    return (
+                      <button
+                        key={dept.id}
+                        onClick={() => setActiveSidebarDept(dept.id)}
+                        className={`w-full p-3 rounded-2xl flex items-center justify-between text-left transition-all ${
+                          isActive
+                            ? 'bg-gradient-to-r from-blue-600/80 to-cyan-500/40 border border-blue-400/50 text-white shadow-lg shadow-blue-500/20 pl-4'
+                            : 'hover:bg-white/10 text-blue-100 border border-white/10'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className={`p-2 rounded-xl bg-gradient-to-r ${dept.themeColor.gradient} text-white shrink-0`}>
+                            <IconRenderer name={dept.iconName} className="w-4 h-4" />
+                          </div>
+                          <span className="text-sm font-semibold text-white truncate">{dept.name}</span>
                         </div>
-                        <span className="text-sm font-bold truncate">{dept.name}</span>
-                      </div>
-                      <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${isActive ? 'bg-blue-400 text-slate-950 font-bold' : 'bg-white/5 text-blue-300'}`}>
-                        {deptLinks.length}
-                      </span>
-                    </button>
-                  );
-                })}
+                        <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${isActive ? 'bg-blue-400 text-slate-950 font-bold' : 'bg-white/10 text-blue-200'}`}>
+                          {deptLinks.length}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
               <div className="flex-1 p-6 sm:p-8 md:p-10 bg-slate-900/40 overflow-y-auto">
                 {(() => {
                   const currentDept = DEPARTMENTS.find(d => d.id === (activeSidebarDept || 'company')) || DEPARTMENTS[0];
                   const deptLinks = filteredLinks.filter(l => l.departmentId === currentDept.id);
                   return (
-                    <div className="space-y-8 animate-fade-in" key={currentDept.id}>
+                    <div className="space-y-10 animate-fade-in" key={currentDept.id}>
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
                         <div className="flex items-center gap-4">
                           <div className={`p-3.5 rounded-2xl bg-gradient-to-r ${currentDept.themeColor.gradient} text-white shadow-xl shrink-0`}>
@@ -354,7 +356,7 @@ export default function App() {
                             <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 m-0 tracking-tight">
                               {currentDept.name}
                             </h3>
-                            <p className="text-xs text-blue-300 font-light m-0 mt-1">
+                            <p className="text-xs text-blue-300 font-light m-0 mt-1 max-w-xl">
                               {currentDept.nameEn} &bull; {currentDept.description}
                             </p>
                           </div>
