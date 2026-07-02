@@ -54,22 +54,7 @@ export default function App() {
   const [isManageOpen, setIsManageOpen] = useState(false);
   const [isDirectoryOpen, setIsDirectoryOpen] = useState(false);
 
-  // --- 5 Design Variations States ---
-  const [groupStyle, setGroupStyle] = useState<'style1' | 'style2' | 'style3' | 'style4' | 'style5'>('style3');
-  const [expandedDepts, setExpandedDepts] = useState<Record<string, boolean>>({
-    company: true,
-    hr: true,
-    it: true,
-    accounting_finance: true,
-    legal_ohs: true,
-    marketing: true,
-    operations: true
-  });
   const [activeSidebarDept, setActiveSidebarDept] = useState<string>('company');
-
-  const toggleExpanded = (deptId: string) => {
-    setExpandedDepts(prev => ({ ...prev, [deptId]: !(prev[deptId] ?? true) }));
-  };
 
   // Sync to localStorage
   useEffect(() => {
@@ -214,280 +199,80 @@ export default function App() {
             </div>
           </div>
         ) : selectedDept === 'all' && !searchQuery ? (
-          /* Grouped by Department View in Single Container - 5 Variations */
-          groupStyle === 'style1' ? (
-            /* Style 1: Modern Stack */
-            <div className="glass p-6 sm:p-8 md:p-10 border border-white/15 shadow-2xl animate-fade-in divide-y divide-white/10">
-              {DEPARTMENTS.map((dept) => {
-                const deptLinks = filteredLinks.filter((l) => l.departmentId === dept.id);
-                if (deptLinks.length === 0) return null;
+          /* Sidebar Split Layout */
+          <div className="glass mx-auto max-w-7xl border border-white/15 shadow-2xl animate-fade-in rounded-3xl overflow-hidden flex flex-col md:flex-row min-h-[560px] w-full">
+            <div className="w-full md:w-80 bg-slate-950/95 p-5 md:p-6 border-b md:border-b-0 md:border-r border-white/10 space-y-2 shrink-0 shadow-xl">
+              <div className="px-2 py-2 text-xs font-semibold tracking-wider uppercase text-cyan-200">
+                หมวดแผนกงาน ({DEPARTMENTS.length})
+              </div>
+              <div className="space-y-2">
+                {DEPARTMENTS.map((dept) => {
+                  const deptLinks = filteredLinks.filter((l) => l.departmentId === dept.id);
+                  const isActive = (activeSidebarDept || 'company') === dept.id;
+                  return (
+                    <button
+                      key={dept.id}
+                      onClick={() => setActiveSidebarDept(dept.id)}
+                      className={`w-full p-3 rounded-2xl flex items-center justify-between text-left transition-all ${
+                        isActive
+                          ? 'bg-gradient-to-r from-blue-600/80 to-cyan-500/40 border border-blue-400/50 text-white shadow-lg shadow-blue-500/20 pl-4'
+                          : 'hover:bg-white/10 text-blue-100 border border-white/10'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={`p-2 rounded-xl bg-gradient-to-r ${dept.themeColor.gradient} text-white shrink-0`}>
+                          <IconRenderer name={dept.iconName} className="w-4 h-4" />
+                        </div>
+                        <span className="text-sm font-semibold text-white truncate">{dept.name}</span>
+                      </div>
+                      <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${isActive ? 'bg-blue-400 text-slate-950 font-bold' : 'bg-white/10 text-blue-200'}`}>
+                        {deptLinks.length}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="flex-1 p-6 sm:p-8 md:p-10 bg-slate-900/40 overflow-y-auto">
+              {(() => {
+                const currentDept = DEPARTMENTS.find(d => d.id === (activeSidebarDept || 'company')) || DEPARTMENTS[0];
+                const deptLinks = filteredLinks.filter(l => l.departmentId === currentDept.id);
                 return (
-                  <section key={dept.id} className="pt-10 first:pt-0 pb-10 last:pb-0 space-y-6">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/10 gap-2">
-                      <div className="flex items-center gap-3.5">
-                        <div className={`p-2.5 rounded-xl bg-gradient-to-r ${dept.themeColor.gradient} text-white shadow-lg shrink-0`}>
-                          <IconRenderer name={dept.iconName} className="w-5 h-5" />
+                  <div className="space-y-10 animate-fade-in" key={currentDept.id}>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className={`p-3.5 rounded-2xl bg-gradient-to-r ${currentDept.themeColor.gradient} text-white shadow-xl shrink-0`}>
+                          <IconRenderer name={currentDept.iconName} className="w-7 h-7" />
                         </div>
                         <div>
-                          <h3 className="text-lg font-bold text-white flex flex-wrap items-center gap-2 m-0 tracking-tight">
-                            {dept.name}
-                            <span className="text-xs font-light text-blue-300/80">({dept.nameEn})</span>
+                          <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 m-0 tracking-tight">
+                            {currentDept.name}
                           </h3>
-                          <p className="text-xs text-blue-200/60 font-light m-0 mt-0.5 leading-relaxed max-w-xl">
-                            {dept.description}
+                          <p className="text-xs text-blue-300 font-light m-0 mt-1 max-w-xl">
+                            {currentDept.nameEn} &bull; {currentDept.description}
                           </p>
                         </div>
                       </div>
-                      <span className="text-xs font-mono px-3 py-1 rounded-full bg-white/5 text-blue-300 border border-white/10 self-start sm:self-center shrink-0">
-                        {deptLinks.length} ระบบ
+                      <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 shrink-0">
+                        รวม {deptLinks.length} ระบบงาน
                       </span>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-1">
-                      {deptLinks.map((link) => (
-                        <AppCard
-                          key={link.id}
-                          link={link}
-                          department={dept}
-                          onToggleFavorite={handleToggleFavorite}
-                        />
-                      ))}
-                    </div>
-                  </section>
-                );
-              })}
-            </div>
-          ) : groupStyle === 'style2' ? (
-            /* Style 2: Accordion Compact */
-            <div className="glass p-6 sm:p-8 md:p-10 border border-white/15 shadow-2xl animate-fade-in space-y-5">
-              {DEPARTMENTS.map((dept) => {
-                const deptLinks = filteredLinks.filter((l) => l.departmentId === dept.id);
-                if (deptLinks.length === 0) return null;
-                const isExpanded = expandedDepts[dept.id] ?? true;
-                return (
-                  <div key={dept.id} className="border border-white/10 rounded-2xl bg-white/[0.02] overflow-hidden transition-all shadow-md">
-                    <button
-                      onClick={() => toggleExpanded(dept.id)}
-                      className="w-full p-5 flex flex-col sm:flex-row sm:items-center justify-between bg-white/[0.03] hover:bg-white/[0.06] transition-colors text-left gap-3"
-                    >
-                      <div className="flex items-center gap-3.5">
-                        <div className={`p-2.5 rounded-xl bg-gradient-to-r ${dept.themeColor.gradient} text-white shadow-lg shrink-0`}>
-                          <IconRenderer name={dept.iconName} className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h3 className="text-base sm:text-lg font-bold text-white flex flex-wrap items-center gap-2 m-0 tracking-tight">
-                            {dept.name}
-                            <span className="text-xs font-light text-blue-300/80">({dept.nameEn})</span>
-                          </h3>
-                          <p className="text-xs text-blue-200/60 font-light m-0 mt-0.5 max-w-xl line-clamp-1">
-                            {dept.description}
-                          </p>
-                        </div>
+                    {deptLinks.length === 0 ? (
+                      <div className="py-12 text-center text-blue-200/50">
+                        ไม่พบระบบงานในแผนกนี้
                       </div>
-                      <div className="flex items-center gap-3 self-end sm:self-center shrink-0">
-                        <span className="text-xs font-mono px-3 py-1 rounded-full bg-white/10 text-blue-300 border border-white/10">
-                          {deptLinks.length} ระบบ
-                        </span>
-                        <div className={`p-1.5 rounded-lg bg-white/5 text-blue-300 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
-                          <ChevronDown className="w-4 h-4" />
-                        </div>
-                      </div>
-                    </button>
-                    {isExpanded && (
-                      <div className="p-6 border-t border-white/10 bg-black/20 animate-fade-in">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                          {deptLinks.map((link) => (
-                            <AppCard key={link.id} link={link} department={dept} onToggleFavorite={handleToggleFavorite} />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          ) : groupStyle === 'style3' ? (
-            /* Style 3: Sidebar Split */
-            <div className="glass mx-auto max-w-6xl border border-white/15 shadow-2xl animate-fade-in rounded-3xl overflow-hidden flex flex-col md:flex-row min-h-[560px]">
-              <div className="w-full md:w-80 bg-slate-950/95 p-5 md:p-6 border-b md:border-b-0 md:border-r border-white/10 space-y-2 shrink-0 shadow-xl">
-                <div className="px-2 py-2 text-xs font-semibold tracking-wider uppercase text-cyan-200">
-                  หมวดแผนกงาน ({DEPARTMENTS.length})
-                </div>
-                <div className="space-y-2">
-                  {DEPARTMENTS.map((dept) => {
-                    const deptLinks = filteredLinks.filter((l) => l.departmentId === dept.id);
-                    if (deptLinks.length === 0) return null;
-                    const isActive = (activeSidebarDept || 'company') === dept.id;
-                    return (
-                      <button
-                        key={dept.id}
-                        onClick={() => setActiveSidebarDept(dept.id)}
-                        className={`w-full p-3 rounded-2xl flex items-center justify-between text-left transition-all ${
-                          isActive
-                            ? 'bg-gradient-to-r from-blue-600/80 to-cyan-500/40 border border-blue-400/50 text-white shadow-lg shadow-blue-500/20 pl-4'
-                            : 'hover:bg-white/10 text-blue-100 border border-white/10'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className={`p-2 rounded-xl bg-gradient-to-r ${dept.themeColor.gradient} text-white shrink-0`}>
-                            <IconRenderer name={dept.iconName} className="w-4 h-4" />
-                          </div>
-                          <span className="text-sm font-semibold text-white truncate">{dept.name}</span>
-                        </div>
-                        <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${isActive ? 'bg-blue-400 text-slate-950 font-bold' : 'bg-white/10 text-blue-200'}`}>
-                          {deptLinks.length}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="flex-1 p-6 sm:p-8 md:p-10 bg-slate-900/40 overflow-y-auto">
-                {(() => {
-                  const currentDept = DEPARTMENTS.find(d => d.id === (activeSidebarDept || 'company')) || DEPARTMENTS[0];
-                  const deptLinks = filteredLinks.filter(l => l.departmentId === currentDept.id);
-                  return (
-                    <div className="space-y-10 animate-fade-in" key={currentDept.id}>
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className={`p-3.5 rounded-2xl bg-gradient-to-r ${currentDept.themeColor.gradient} text-white shadow-xl shrink-0`}>
-                            <IconRenderer name={currentDept.iconName} className="w-7 h-7" />
-                          </div>
-                          <div>
-                            <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 m-0 tracking-tight">
-                              {currentDept.name}
-                            </h3>
-                            <p className="text-xs text-blue-300 font-light m-0 mt-1 max-w-xl">
-                              {currentDept.nameEn} &bull; {currentDept.description}
-                            </p>
-                          </div>
-                        </div>
-                        <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 shrink-0">
-                          รวม {deptLinks.length} ระบบงาน
-                        </span>
-                      </div>
+                    ) : (
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {deptLinks.map((link) => (
                           <AppCard key={link.id} link={link} department={currentDept} onToggleFavorite={handleToggleFavorite} />
                         ))}
                       </div>
-                    </div>
-                  );
-                })()}
-              </div>
-            </div>
-          ) : groupStyle === 'style4' ? (
-            /* Style 4: Compact Table List */
-            <div className="glass p-6 sm:p-8 md:p-10 border border-white/15 shadow-2xl animate-fade-in divide-y divide-white/10">
-              {DEPARTMENTS.map((dept) => {
-                const deptLinks = filteredLinks.filter((l) => l.departmentId === dept.id);
-                if (deptLinks.length === 0) return null;
-                return (
-                  <section key={dept.id} className="pt-8 first:pt-0 pb-8 last:pb-0 space-y-4">
-                    <div className="flex items-center gap-3 pb-2">
-                      <div className={`p-2 rounded-xl bg-gradient-to-r ${dept.themeColor.gradient} text-white shadow-md shrink-0`}>
-                        <IconRenderer name={dept.iconName} className="w-4 h-4" />
-                      </div>
-                      <h3 className="text-base font-bold text-white m-0">
-                        {dept.name} <span className="text-xs font-light text-blue-300">({dept.nameEn})</span>
-                      </h3>
-                      <span className="text-xs font-mono px-2 py-0.5 rounded bg-white/5 text-blue-300 border border-white/10 ml-auto">
-                        {deptLinks.length} ระบบ
-                      </span>
-                    </div>
-                    <div className="space-y-2.5">
-                      {deptLinks.map((link) => {
-                        const isFav = link.isFavorite;
-                        return (
-                          <div
-                            key={link.id}
-                            className="group flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 hover:border-blue-400/30 transition-all gap-3 shadow-sm"
-                          >
-                            <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                              <button
-                                onClick={() => handleToggleFavorite(link.id)}
-                                className={`p-1.5 rounded-lg transition-colors shrink-0 ${isFav ? 'text-amber-400 bg-amber-400/10' : 'text-slate-500 hover:text-slate-300'}`}
-                                title={isFav ? 'ลบออกจากรายการโปรด' : 'เพิ่มในรายการโปรด'}
-                              >
-                                <Star className={`w-4 h-4 ${isFav ? 'fill-amber-400' : ''}`} />
-                              </button>
-                              <div className={`p-2.5 rounded-xl ${dept.themeColor.bg} ${dept.themeColor.text} shrink-0`}>
-                                <IconRenderer name={link.iconName} className="w-4 h-4" />
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <div className="flex items-center gap-2">
-                                  <h4 className="text-sm sm:text-base font-bold text-white m-0 truncate group-hover:text-blue-300 transition-colors">
-                                    {link.title}
-                                  </h4>
-                                  {link.status === 'maintenance' && (
-                                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 shrink-0">
-                                      ปิดปรับปรุง
-                                    </span>
-                                  )}
-                                </div>
-                                <p className="text-xs text-blue-200/60 m-0 truncate mt-0.5 font-light">
-                                  {link.description}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
-                              <a
-                                href={link.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-bold shadow-md transition-all"
-                              >
-                                <span>เปิดระบบ</span>
-                                <ExternalLink className="w-3.5 h-3.5" />
-                              </a>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </section>
-                );
-              })}
-            </div>
-          ) : (
-            /* Style 5: Bento Grid Focus */
-            <div className="glass p-6 sm:p-8 md:p-10 border border-white/15 shadow-2xl animate-fade-in bg-slate-950/80 space-y-8">
-              {DEPARTMENTS.map((dept) => {
-                const deptLinks = filteredLinks.filter((l) => l.departmentId === dept.id);
-                if (deptLinks.length === 0) return null;
-                return (
-                  <div
-                    key={dept.id}
-                    className="p-6 sm:p-8 rounded-3xl bg-slate-900/60 border border-white/10 shadow-xl relative overflow-hidden group/bento"
-                  >
-                    <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b ${dept.themeColor.gradient}`} />
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 mb-6 border-b border-white/10 gap-3">
-                      <div className="flex items-center gap-3.5 pl-2">
-                        <div className={`p-3 rounded-2xl bg-gradient-to-r ${dept.themeColor.gradient} text-white shadow-lg`}>
-                          <IconRenderer name={dept.iconName} className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-white m-0 tracking-tight flex items-center gap-2">
-                            {dept.name}
-                          </h3>
-                          <p className="text-xs text-blue-300/80 m-0 mt-0.5">
-                            {dept.nameEn} &bull; {dept.description}
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-mono px-3 py-1.5 rounded-full bg-white/5 text-blue-300 border border-white/10">
-                        {deptLinks.length} ระบบงาน
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {deptLinks.map((link) => (
-                        <AppCard key={link.id} link={link} department={dept} onToggleFavorite={handleToggleFavorite} />
-                      ))}
-                    </div>
+                    )}
                   </div>
                 );
-              })}
+              })()}
             </div>
-          )
+          </div>
         ) : (
           /* Cards Grid View in Single Container */
           <div className="glass p-6 sm:p-8 md:p-10 border border-white/15 shadow-2xl animate-fade-in space-y-6">
