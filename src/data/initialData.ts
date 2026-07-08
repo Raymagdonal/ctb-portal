@@ -2,20 +2,6 @@ import { Department, AppScriptLink, Announcement, ContactItem } from '../types';
 
 export const DEPARTMENTS: Department[] = [
   {
-    id: 'company',
-    name: 'ทั้งบริษัท',
-    nameEn: 'Corporate & General',
-    description: 'ระบบกลาง กฎระเบียบ ประกาศ และบริการส่วนรวมสำหรับพนักงานทุกคน',
-    iconName: 'Building2',
-    themeColor: {
-      bg: 'bg-blue-950/40 hover:bg-blue-950/60',
-      border: 'border-blue-500/30 hover:border-blue-400',
-      text: 'text-blue-400',
-      badge: 'bg-blue-500/10 text-blue-300 border-blue-500/30',
-      gradient: 'from-blue-600 to-cyan-500'
-    }
-  },
-  {
     id: 'hr',
     name: 'แผนกบุคคล',
     nameEn: 'Human Resources',
@@ -102,13 +88,13 @@ export const DEPARTMENTS: Department[] = [
 ];
 
 export const INITIAL_LINKS: AppScriptLink[] = [
-  // --- ทั้งบริษัท (Company) ---
+  // --- แผนกบุคคล (HR) - โอนย้ายจากบริการกลาง ---
   {
     id: 'comp-1',
     title: 'จองห้องประชุมสำนักงานใหญ่',
     description: 'ตรวจสอบตารางว่างและจองห้องประชุมชั้น 2 และชั้น 3 พร้อมขอใช้อุปกรณ์ Video Conference',
     url: 'https://script.google.com/macros/s/AKfycbx_meeting_room_booking/exec',
-    departmentId: 'company',
+    departmentId: 'hr',
     status: 'active',
     accessRequired: 'พนักงานทุกคน',
     iconName: 'CalendarRange',
@@ -121,7 +107,7 @@ export const INITIAL_LINKS: AppScriptLink[] = [
     title: 'ระบบขอรถส่วนกลาง',
     description: 'แจ้งความประสงค์ขอใช้รถยนต์บริษัทเพื่อติดต่อราชการหรือลูกค้าภายนอก',
     url: 'https://script.google.com/macros/s/AKfycbx_company_car_request/exec',
-    departmentId: 'company',
+    departmentId: 'hr',
     status: 'active',
     accessRequired: 'พนักงานทุกคน',
     iconName: 'Car',
@@ -133,7 +119,7 @@ export const INITIAL_LINKS: AppScriptLink[] = [
     title: 'คลังเอกสารและแบบฟอร์มบริษัท (ISO)',
     description: 'ดาวน์โหลดหัวจดหมาย โลโก้บริษัท แบบฟอร์มมาตรฐาน และนโยบายบริษัทล่าสุด',
     url: 'https://script.google.com/macros/s/AKfycbx_document_center/exec',
-    departmentId: 'company',
+    departmentId: 'hr',
     status: 'active',
     accessRequired: 'พนักงานทุกคน',
     iconName: 'FolderArchive',

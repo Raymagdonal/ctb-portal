@@ -55,7 +55,7 @@ export default function App() {
   const [isManageOpen, setIsManageOpen] = useState(false);
   const [isDirectoryOpen, setIsDirectoryOpen] = useState(false);
 
-  const [activeSidebarDept, setActiveSidebarDept] = useState<string>('company');
+  const [activeSidebarDept, setActiveSidebarDept] = useState<string>('hr');
 
   // Sync to localStorage
   useEffect(() => {
