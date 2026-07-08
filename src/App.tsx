@@ -121,10 +121,6 @@ export default function App() {
     return counts;
   }, [links]);
 
-  useEffect(() => {
-    console.log("CTB Portal State:", { selectedDept, searchQuery, linksCount: links.length, filteredCount: filteredLinks.length });
-  }, [selectedDept, searchQuery, links, filteredLinks]);
-
   return (
     <div className="min-h-screen relative flex flex-col bg-[#041e3a] text-white selection:bg-blue-400 selection:text-slate-950 font-sans overflow-x-hidden">
       <div className="mesh-bg"></div>
