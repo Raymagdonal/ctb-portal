@@ -21,7 +21,15 @@ export default function App() {
   const [links, setLinks] = useState<AppScriptLink[]>(() => {
     try {
       const savedV2 = localStorage.getItem(LINKS_STORAGE_KEY);
-      if (savedV2) return JSON.parse(savedV2);
+      if (savedV2) {
+        const parsed: AppScriptLink[] = JSON.parse(savedV2);
+        return parsed.map(l => {
+          if (l.departmentId === 'company') {
+            return { ...l, departmentId: 'hr' };
+          }
+          return l;
+        });
+      }
 
       const savedV1 = localStorage.getItem('ctb_portal_links_v1');
       if (savedV1) {
