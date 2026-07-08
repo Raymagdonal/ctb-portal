@@ -149,18 +149,14 @@ export default function App() {
 
       {/* Main Grid Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 w-full pb-12">
-        
-        {/* Section Title when filtering */}
+
+        {/* Section Title */}
         <div className="flex items-center justify-between mb-6 pb-2 border-b border-blue-900/60">
           <h2 className="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            <span>
-              {selectedDept === 'all'
-                ? 'ระบบงานทั้งหมดในองค์กร'
-                : `ระบบงานประจำ${DEPARTMENTS.find(d => d.id === selectedDept)?.name}`}
-            </span>
+            <span>ระบบงานทั้งหมดในองค์กร</span>
             {searchQuery && (
               <span className="text-xs font-normal text-cyan-300 ml-2">
-                (ผลการค้นหา: &quot;{searchQuery}&quot;)
+                (ค้นหา: &quot;{searchQuery}&quot;)
               </span>
             )}
           </h2>
@@ -169,84 +165,97 @@ export default function App() {
           </span>
         </div>
 
-        
-        {/* Empty State */}
-        {filteredLinks.length === 0 ? (
-          <div className="py-20 text-center rounded-3xl bg-slate-900/40 border border-blue-900/60 max-w-xl mx-auto p-8 my-8 shadow-inner">
-            <div className="w-16 h-16 rounded-full bg-blue-950 flex items-center justify-center mx-auto mb-4 border border-blue-800 text-cyan-400">
-              <SearchX className="w-8 h-8" />
+        {/* Always-Visible Sidebar Split Layout */}
+        <div className="rounded-3xl overflow-hidden flex flex-col md:flex-row w-full border shadow-2xl animate-fade-in" style={{minHeight: '600px', background: '#0f2040', borderColor: 'rgba(147,197,253,0.15)'}}>
+
+          {/* === LEFT SIDEBAR — always visible === */}
+          <div className="w-full md:w-72 p-5 md:p-6 border-b md:border-b-0 md:border-r shrink-0 flex flex-col gap-1.5" style={{background: '#ffffff', borderColor: '#cbd5e1'}}>
+            <div className="text-xs font-bold tracking-wider uppercase pb-3 mb-1 border-b" style={{color: '#1e40af', borderColor: '#e2e8f0'}}>
+              หมวดแผนกงาน ({DEPARTMENTS.length})
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">ไม่พบระบบงานที่ต้องการ</h3>
-            <p className="text-sm text-blue-200/70 mb-6 max-w-sm mx-auto">
-              ลองตรวจสอบคำสะกด หรือเลือกดูในแท็บ &quot;ทุกแผนก / ระบบทั้งหมด&quot;
-            </p>
-            <div className="flex items-center justify-center gap-3">
-              {searchQuery && (
+            {DEPARTMENTS.map((dept) => {
+              const deptLinkCount = links.filter((l) => l.departmentId === dept.id).length;
+              const isActive = activeSidebarDept === dept.id;
+              return (
                 <button
-                  onClick={() => setSearchQuery('')}
-                  className="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm transition-all shadow-md"
+                  key={dept.id}
+                  onClick={() => { setActiveSidebarDept(dept.id); setSearchQuery(''); }}
+                  style={isActive
+                    ? {background: '#1e40af', color: '#ffffff', border: '1px solid #3b82f6', borderRadius: '12px', padding: '10px 12px'}
+                    : {background: '#f1f5f9', color: '#1e293b', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px'}
+                  }
+                  className="w-full flex items-center justify-between text-left transition-all hover:opacity-90"
                 >
-                  ล้างคำค้นหา
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div style={isActive
+                      ? {background: '#3b82f6', color: '#fff', padding: '6px', borderRadius: '8px', flexShrink: 0}
+                      : {background: '#dbeafe', color: '#1d4ed8', padding: '6px', borderRadius: '8px', flexShrink: 0}
+                    }>
+                      <IconRenderer name={dept.iconName} className="w-4 h-4" />
+                    </div>
+                    <span className="text-sm font-semibold truncate">{dept.name}</span>
+                  </div>
+                  <span style={isActive
+                    ? {background: '#ffffff', color: '#1e40af', padding: '1px 8px', borderRadius: '99px', fontWeight: 700, fontSize: '11px', flexShrink: 0}
+                    : {background: '#e0e7ff', color: '#1e40af', padding: '1px 8px', borderRadius: '99px', fontSize: '11px', flexShrink: 0}
+                  }>
+                    {deptLinkCount}
+                  </span>
                 </button>
-              )}
-              {selectedDept !== 'all' && (
-                <button
-                  onClick={() => setSelectedDept('all')}
-                  className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-blue-200 font-semibold text-sm transition-all border border-blue-700"
-                >
-                  แสดงทุกแผนก
-                </button>
-              )}
-            </div>
+              );
+            })}
           </div>
-        ) : selectedDept === 'all' && !searchQuery ? (
-          /* Sidebar Split Layout */
-          <div className="mx-auto max-w-7xl rounded-3xl overflow-hidden flex flex-col md:flex-row min-h-[580px] w-full border border-blue-200/30 shadow-2xl animate-fade-in" style={{background: '#0f2040'}}>
-            <div className="w-full md:w-72 p-5 md:p-6 border-b md:border-b-0 md:border-r shrink-0 flex flex-col shadow-xl" style={{background: '#ffffff', borderColor: '#cbd5e1'}}>
-              <div className="px-2 py-2 text-xs font-bold tracking-wider uppercase border-b pb-3 mb-3" style={{color: '#1e40af', borderColor: '#e2e8f0'}}>
-                หมวดแผนกงาน ({DEPARTMENTS.length})
-              </div>
-              <div className="space-y-1.5">
-                {DEPARTMENTS.map((dept) => {
-                  const deptLinks = filteredLinks.filter((l) => l.departmentId === dept.id);
-                  const isActive = (activeSidebarDept || 'company') === dept.id;
-                  return (
-                    <button
-                      key={dept.id}
-                      onClick={() => setActiveSidebarDept(dept.id)}
-                      style={isActive ? {background: '#1e40af', color: '#ffffff', border: '1px solid #3b82f6'} : {background: '#f1f5f9', color: '#1e293b', border: '1px solid #e2e8f0'}}
-                      className={`w-full p-3 rounded-xl flex items-center justify-between text-left transition-all hover:opacity-90`}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div style={isActive ? {background: '#3b82f6', color: '#fff', padding: '6px', borderRadius: '10px'} : {background: '#dbeafe', color: '#1d4ed8', padding: '6px', borderRadius: '10px'}}>
-                          <IconRenderer name={dept.iconName} className="w-4 h-4" />
-                        </div>
-                        <span className="text-sm font-semibold truncate">{dept.name}</span>
-                      </div>
-                      <span style={isActive ? {background: '#ffffff', color: '#1e40af', padding: '1px 8px', borderRadius: '99px', fontWeight: 700, fontSize: '12px'} : {background: '#e0e7ff', color: '#1e40af', padding: '1px 8px', borderRadius: '99px', fontSize: '12px'}}>
-                        {deptLinks.length}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="flex-1 p-6 sm:p-8 md:p-10 bg-[#080f1d] overflow-y-auto">
-              {(() => {
-                const currentDept = DEPARTMENTS.find(d => d.id === (activeSidebarDept || 'company')) || DEPARTMENTS[0];
-                const deptLinks = filteredLinks.filter(l => l.departmentId === currentDept.id);
+
+          {/* === RIGHT CONTENT PANEL === */}
+          <div className="flex-1 p-6 sm:p-8 md:p-10 overflow-y-auto" style={{background: '#080f1d'}}>
+            {searchQuery ? (
+              /* Search Results Mode */
+              filteredLinks.length === 0 ? (
+                <div className="py-20 text-center">
+                  <div className="w-16 h-16 rounded-full bg-blue-950 flex items-center justify-center mx-auto mb-4 border border-blue-800 text-cyan-400">
+                    <SearchX className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">ไม่พบระบบงานที่ต้องการ</h3>
+                  <p className="text-sm text-blue-200/70 mb-6">ลองตรวจสอบคำสะกด หรือเลือกแผนกจากเมนูด้านซ้าย</p>
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm transition-all shadow-md"
+                  >
+                    ล้างคำค้นหา
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-8 animate-fade-in">
+                  <div className="pb-4 border-b border-blue-900/50 text-sm text-blue-300">
+                    ผลการค้นหา &quot;<span className="font-bold text-white">{searchQuery}</span>&quot; — พบ {filteredLinks.length} ระบบงาน
+                  </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {filteredLinks.map((link) => {
+                      const dept = DEPARTMENTS.find(d => d.id === link.departmentId);
+                      return (
+                        <AppCard key={link.id} link={link} department={dept} onToggleFavorite={handleToggleFavorite} />
+                      );
+                    })}
+                  </div>
+                </div>
+              )
+            ) : (
+              /* Department Content Mode */
+              (() => {
+                const currentDept = DEPARTMENTS.find(d => d.id === activeSidebarDept) || DEPARTMENTS[0];
+                const deptLinks = links.filter(l => l.departmentId === currentDept.id);
                 return (
-                  <div className="space-y-10 animate-fade-in" key={currentDept.id}>
+                  <div className="space-y-8 animate-fade-in" key={currentDept.id}>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-blue-900/50 gap-4">
                       <div className="flex items-center gap-4">
                         <div className={`p-3.5 rounded-2xl bg-gradient-to-r ${currentDept.themeColor.gradient} text-white shadow-xl shrink-0`}>
                           <IconRenderer name={currentDept.iconName} className="w-7 h-7" />
                         </div>
                         <div>
-                          <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 m-0 tracking-tight">
+                          <h3 className="text-xl sm:text-2xl font-bold text-white m-0 tracking-tight">
                             {currentDept.name}
                           </h3>
-                          <p className="text-xs text-blue-300 font-light m-0 mt-1 max-w-xl">
+                          <p className="text-xs text-blue-300 font-light m-0 mt-1">
                             {currentDept.nameEn} &bull; {currentDept.description}
                           </p>
                         </div>
@@ -257,7 +266,7 @@ export default function App() {
                     </div>
                     {deptLinks.length === 0 ? (
                       <div className="py-12 text-center text-blue-200/50">
-                        ไม่พบระบบงานในแผนกนี้
+                        ยังไม่มีระบบงานในแผนกนี้
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -268,58 +277,10 @@ export default function App() {
                     )}
                   </div>
                 );
-              })()}
-            </div>
-          </div>
-        ) : (
-          /* Cards Grid View in Single Container */
-          <div className="glass p-6 sm:p-8 md:p-10 border border-white/15 shadow-2xl animate-fade-in space-y-6">
-            {selectedDept !== 'all' && (() => {
-              const activeDept = DEPARTMENTS.find(d => d.id === selectedDept);
-              if (!activeDept) return null;
-              return (
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-white/10 gap-2">
-                  <div className="flex items-center gap-3.5">
-                    <div className={`p-2.5 rounded-xl bg-gradient-to-r ${activeDept.themeColor.gradient} text-white shadow-lg shrink-0`}>
-                      <IconRenderer name={activeDept.iconName} className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-white flex flex-wrap items-center gap-2 m-0 tracking-tight">
-                        {activeDept.name}
-                        <span className="text-xs font-light text-blue-300/80">({activeDept.nameEn})</span>
-                      </h3>
-                      <p className="text-xs text-blue-200/60 font-light m-0 mt-0.5 leading-relaxed max-w-xl">
-                        {activeDept.description}
-                      </p>
-                    </div>
-                  </div>
-                  <span className="text-xs font-mono px-3 py-1 rounded-full bg-white/5 text-blue-300 border border-white/10 self-start sm:self-center shrink-0">
-                    {filteredLinks.length} ระบบ
-                  </span>
-                </div>
-              );
-            })()}
-            {searchQuery && (
-              <div className="flex items-center justify-between pb-4 border-b border-white/10 text-sm font-light text-blue-200">
-                <span>ผลการค้นหาสำหรับ &quot;<span className="font-bold text-white">{searchQuery}</span>&quot;</span>
-                <span className="font-mono text-xs text-blue-300">{filteredLinks.length} ระบบ</span>
-              </div>
+              })()
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredLinks.map((link) => {
-                const dept = DEPARTMENTS.find(d => d.id === link.departmentId);
-                return (
-                  <AppCard
-                    key={link.id}
-                    link={link}
-                    department={dept}
-                    onToggleFavorite={handleToggleFavorite}
-                  />
-                );
-              })}
-            </div>
           </div>
-        )}
+        </div>
 
       </main>
 
