@@ -122,7 +122,7 @@ export default function App() {
   }, [links]);
 
   return (
-    <div className="min-h-screen relative flex flex-col bg-[#041e3a] text-white selection:bg-blue-400 selection:text-slate-950 font-sans overflow-x-hidden">
+    <div className="min-h-screen relative flex flex-col bg-[#030712] text-white selection:bg-cyan-500 selection:text-slate-950 font-sans overflow-x-hidden">
       <div className="mesh-bg"></div>
       <div className="river-flow"></div>
       
@@ -131,9 +131,11 @@ export default function App() {
         onOpenDirectory={() => setIsDirectoryOpen(true)}
         onOpenManage={() => setIsManageOpen(true)}
         announcementCount={announcements.length}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
 
-      {/* Hero Banner & Search Marquee */}
+      {/* Hero Banner */}
       <HeroBanner
         announcements={announcements}
       />
@@ -151,26 +153,26 @@ export default function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 w-full pb-12">
 
         {/* Section Title */}
-        <div className="flex items-center justify-between mb-6 pb-2 border-b border-blue-900/60">
-          <h2 className="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2">
+        <div className="flex items-center justify-between mb-6 pb-2.5 border-b border-slate-800/85">
+          <h2 className="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2 m-0">
             <span>ระบบงานทั้งหมดในองค์กร</span>
             {searchQuery && (
-              <span className="text-xs font-normal text-cyan-300 ml-2">
-                (ค้นหา: &quot;{searchQuery}&quot;)
+              <span className="text-xs font-normal text-cyan-400 ml-2">
+                (ค้นหาสำหรับ: &quot;{searchQuery}&quot;)
               </span>
             )}
           </h2>
-          <span className="text-xs text-blue-300 font-mono">
+          <span className="text-xs text-slate-400 font-mono">
             แสดงผล {filteredLinks.length} รายการ
           </span>
         </div>
 
         {/* Always-Visible Sidebar Split Layout */}
-        <div className="rounded-3xl overflow-hidden flex flex-col md:flex-row w-full border shadow-2xl animate-fade-in" style={{minHeight: '600px', background: '#0f2040', borderColor: 'rgba(147,197,253,0.15)'}}>
+        <div className="rounded-3xl overflow-hidden flex flex-col md:flex-row w-full border shadow-2xl animate-fade-in" style={{minHeight: '600px', background: '#0b0f1a', borderColor: 'rgba(255,255,255,0.06)'}}>
 
           {/* === LEFT SIDEBAR — always visible === */}
-          <div className="w-full md:w-72 p-5 md:p-6 border-b md:border-b-0 md:border-r shrink-0 flex flex-col gap-1.5" style={{background: '#ffffff', borderColor: '#cbd5e1'}}>
-            <div className="text-xs font-bold tracking-wider uppercase pb-3 mb-1 border-b" style={{color: '#1e40af', borderColor: '#e2e8f0'}}>
+          <div className="w-full md:w-72 p-5 md:p-6 border-b md:border-b-0 md:border-r shrink-0 flex flex-col gap-2" style={{background: '#ffffff', borderColor: '#e2e8f0'}}>
+            <div className="text-xs font-extrabold tracking-wider uppercase pb-3 mb-1 border-b" style={{color: '#1e40af', borderColor: '#f1f5f9'}}>
               หมวดแผนกงาน ({DEPARTMENTS.length})
             </div>
             {DEPARTMENTS.map((dept) => {
@@ -181,23 +183,23 @@ export default function App() {
                   key={dept.id}
                   onClick={() => { setActiveSidebarDept(dept.id); setSearchQuery(''); }}
                   style={isActive
-                    ? {background: '#1e40af', color: '#ffffff', border: '1px solid #3b82f6', borderRadius: '12px', padding: '10px 12px'}
-                    : {background: '#f1f5f9', color: '#1e293b', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px'}
+                    ? {background: '#1e40af', color: '#ffffff', border: '1px solid #3b82f6', borderRadius: '14px', padding: '10px 14px'}
+                    : {background: '#f8fafc', color: '#1e293b', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 14px'}
                   }
-                  className="w-full flex items-center justify-between text-left transition-all hover:opacity-90"
+                  className="w-full flex items-center justify-between text-left transition-all hover:opacity-90 active:scale-98 cursor-pointer"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div style={isActive
-                      ? {background: '#3b82f6', color: '#fff', padding: '6px', borderRadius: '8px', flexShrink: 0}
-                      : {background: '#dbeafe', color: '#1d4ed8', padding: '6px', borderRadius: '8px', flexShrink: 0}
+                      ? {background: '#3b82f6', color: '#fff', padding: '6px', borderRadius: '10px', flexShrink: 0}
+                      : {background: '#e0e7ff', color: '#1d4ed8', padding: '6px', borderRadius: '10px', flexShrink: 0}
                     }>
                       <IconRenderer name={dept.iconName} className="w-4 h-4" />
                     </div>
-                    <span className="text-sm font-semibold truncate">{dept.name}</span>
+                    <span className="text-sm font-bold truncate">{dept.name}</span>
                   </div>
                   <span style={isActive
-                    ? {background: '#ffffff', color: '#1e40af', padding: '1px 8px', borderRadius: '99px', fontWeight: 700, fontSize: '11px', flexShrink: 0}
-                    : {background: '#e0e7ff', color: '#1e40af', padding: '1px 8px', borderRadius: '99px', fontSize: '11px', flexShrink: 0}
+                    ? {background: '#ffffff', color: '#1e40af', padding: '2px 8px', borderRadius: '99px', fontWeight: 700, fontSize: '11px', flexShrink: 0}
+                    : {background: '#e2e8f0', color: '#1e40af', padding: '2px 8px', borderRadius: '99px', fontSize: '11px', fontWeight: 600, flexShrink: 0}
                   }>
                     {deptLinkCount}
                   </span>
@@ -207,26 +209,26 @@ export default function App() {
           </div>
 
           {/* === RIGHT CONTENT PANEL === */}
-          <div className="flex-1 p-6 sm:p-8 md:p-10 overflow-y-auto" style={{background: '#080f1d'}}>
+          <div className="flex-1 p-6 sm:p-8 md:p-10 overflow-y-auto" style={{background: '#090d16'}}>
             {searchQuery ? (
               /* Search Results Mode */
               filteredLinks.length === 0 ? (
                 <div className="py-20 text-center">
-                  <div className="w-16 h-16 rounded-full bg-blue-950 flex items-center justify-center mx-auto mb-4 border border-blue-800 text-cyan-400">
+                  <div className="w-16 h-16 rounded-full bg-slate-900 flex items-center justify-center mx-auto mb-4 border border-slate-800 text-cyan-400">
                     <SearchX className="w-8 h-8" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">ไม่พบระบบงานที่ต้องการ</h3>
-                  <p className="text-sm text-blue-200/70 mb-6">ลองตรวจสอบคำสะกด หรือเลือกแผนกจากเมนูด้านซ้าย</p>
+                  <h3 className="text-lg font-bold text-white mb-2">ไม่พบระบบงานที่ต้องการ</h3>
+                  <p className="text-xs text-slate-400 mb-6 font-light">ลองตรวจสอบคำสะกด หรือเลือกแผนกจากเมนูด้านซ้าย</p>
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm transition-all shadow-md"
+                    className="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-all shadow-md cursor-pointer"
                   >
                     ล้างคำค้นหา
                   </button>
                 </div>
               ) : (
                 <div className="space-y-8 animate-fade-in">
-                  <div className="pb-4 border-b border-blue-900/50 text-sm text-blue-300">
+                  <div className="pb-4 border-b border-slate-800/80 text-sm text-slate-400">
                     ผลการค้นหา &quot;<span className="font-bold text-white">{searchQuery}</span>&quot; — พบ {filteredLinks.length} ระบบงาน
                   </div>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -246,7 +248,7 @@ export default function App() {
                 const deptLinks = links.filter(l => l.departmentId === currentDept.id);
                 return (
                   <div className="space-y-8 animate-fade-in" key={currentDept.id}>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-blue-900/50 gap-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-800/80 gap-4">
                       <div className="flex items-center gap-4">
                         <div className={`p-3.5 rounded-2xl bg-gradient-to-r ${currentDept.themeColor.gradient} text-white shadow-xl shrink-0`}>
                           <IconRenderer name={currentDept.iconName} className="w-7 h-7" />
@@ -255,18 +257,18 @@ export default function App() {
                           <h3 className="text-xl sm:text-2xl font-bold text-white m-0 tracking-tight">
                             {currentDept.name}
                           </h3>
-                          <p className="text-xs text-blue-300 font-light m-0 mt-1">
+                          <p className="text-xs text-slate-400 font-light m-0 mt-1">
                             {currentDept.nameEn} &bull; {currentDept.description}
                           </p>
                         </div>
                       </div>
-                      <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-blue-950 text-blue-300 border border-blue-900/60 shrink-0">
+                      <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-slate-900 text-cyan-400 border border-slate-850 shrink-0">
                         รวม {deptLinks.length} ระบบงาน
                       </span>
                     </div>
                     {deptLinks.length === 0 ? (
-                      <div className="py-12 text-center text-blue-200/50">
-                        ยังไม่มีระบบงานในแผนกนี้
+                      <div className="py-16 text-center text-slate-500 font-light text-sm">
+                        ยังไม่มีระบบงานลงทะเบียนในแผนกนี้
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -280,6 +282,7 @@ export default function App() {
               })()
             )}
           </div>
+
         </div>
 
       </main>
