@@ -65,6 +65,10 @@ export default function App() {
     localStorage.setItem(ANNOUNCEMENTS_STORAGE_KEY, JSON.stringify(announcements));
   }, [announcements]);
 
+  useEffect(() => {
+    console.log("CTB Portal State:", { selectedDept, searchQuery, linksCount: links.length, filteredCount: filteredLinks.length });
+  }, [selectedDept, searchQuery, links, filteredLinks]);
+
   // --- Handlers ---
   const handleToggleFavorite = (id: string) => {
     setLinks(prev => prev.map(l => l.id === id ? { ...l, isFavorite: !l.isFavorite } : l));
@@ -200,9 +204,9 @@ export default function App() {
           </div>
         ) : selectedDept === 'all' && !searchQuery ? (
           /* Sidebar Split Layout */
-          <div className="glass mx-auto max-w-7xl border border-white/15 shadow-2xl animate-fade-in rounded-3xl overflow-hidden flex flex-col md:flex-row min-h-[560px] w-full">
-            <div className="w-full md:w-80 bg-slate-950/95 p-5 md:p-6 border-b md:border-b-0 md:border-r border-white/10 space-y-2 shrink-0 shadow-xl">
-              <div className="px-2 py-2 text-xs font-semibold tracking-wider uppercase text-cyan-200">
+          <div className="mx-auto max-w-7xl rounded-3xl overflow-hidden flex flex-col md:flex-row min-h-[580px] w-full border border-blue-900/50 bg-[#081329] shadow-2xl animate-fade-in">
+            <div className="w-full md:w-80 bg-[#040a17] p-5 md:p-6 border-b md:border-b-0 md:border-r border-blue-900/50 space-y-3 shrink-0 flex flex-col shadow-xl">
+              <div className="px-2 py-2 text-xs font-bold tracking-wider uppercase text-cyan-400 border-b border-blue-900/30 pb-3 mb-2">
                 หมวดแผนกงาน ({DEPARTMENTS.length})
               </div>
               <div className="space-y-2">
@@ -215,17 +219,21 @@ export default function App() {
                       onClick={() => setActiveSidebarDept(dept.id)}
                       className={`w-full p-3 rounded-2xl flex items-center justify-between text-left transition-all ${
                         isActive
-                          ? 'bg-gradient-to-r from-blue-600/80 to-cyan-500/40 border border-blue-400/50 text-white shadow-lg shadow-blue-500/20 pl-4'
-                          : 'hover:bg-white/10 text-blue-100 border border-white/10'
+                          ? 'bg-[#1e40af] text-white border border-[#3b82f6] shadow-lg shadow-blue-500/20 pl-4'
+                          : 'bg-[#0a1224] hover:bg-[#111e3b] text-blue-200 border border-blue-900/20'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className={`p-2 rounded-xl bg-gradient-to-r ${dept.themeColor.gradient} text-white shrink-0`}>
+                        <div className={`p-2 rounded-xl shrink-0 ${
+                          isActive ? 'bg-blue-500 text-white' : 'bg-blue-950/80 text-blue-400 border border-blue-900/30'
+                        }`}>
                           <IconRenderer name={dept.iconName} className="w-4 h-4" />
                         </div>
-                        <span className="text-sm font-semibold text-white truncate">{dept.name}</span>
+                        <span className="text-sm font-semibold truncate">{dept.name}</span>
                       </div>
-                      <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${isActive ? 'bg-blue-400 text-slate-950 font-bold' : 'bg-white/10 text-blue-200'}`}>
+                      <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${
+                        isActive ? 'bg-white text-blue-900 font-bold' : 'bg-blue-950/90 text-blue-300 border border-blue-900/40'
+                      }`}>
                         {deptLinks.length}
                       </span>
                     </button>
@@ -233,13 +241,13 @@ export default function App() {
                 })}
               </div>
             </div>
-            <div className="flex-1 p-6 sm:p-8 md:p-10 bg-slate-900/40 overflow-y-auto">
+            <div className="flex-1 p-6 sm:p-8 md:p-10 bg-[#080f1d] overflow-y-auto">
               {(() => {
                 const currentDept = DEPARTMENTS.find(d => d.id === (activeSidebarDept || 'company')) || DEPARTMENTS[0];
                 const deptLinks = filteredLinks.filter(l => l.departmentId === currentDept.id);
                 return (
                   <div className="space-y-10 animate-fade-in" key={currentDept.id}>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-blue-900/50 gap-4">
                       <div className="flex items-center gap-4">
                         <div className={`p-3.5 rounded-2xl bg-gradient-to-r ${currentDept.themeColor.gradient} text-white shadow-xl shrink-0`}>
                           <IconRenderer name={currentDept.iconName} className="w-7 h-7" />
@@ -253,7 +261,7 @@ export default function App() {
                           </p>
                         </div>
                       </div>
-                      <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20 shrink-0">
+                      <span className="text-xs font-mono px-3.5 py-1.5 rounded-full bg-blue-950 text-blue-300 border border-blue-900/60 shrink-0">
                         รวม {deptLinks.length} ระบบงาน
                       </span>
                     </div>

@@ -69,7 +69,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         <div className="text-center max-w-3xl mx-auto my-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/10 text-blue-300 text-xs font-light tracking-widest uppercase mb-4 backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-            <span>Google Apps Script Central Portal</span>
+            <span>Google Apps Script Central Portal v1.1</span>
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white m-0 leading-tight">
             ระบบงานออนไลน์ <span className="font-bold text-white">CTB PORTAL</span>
