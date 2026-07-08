@@ -7,6 +7,7 @@ import { IconRenderer } from './components/IconRenderer';
 import { ManageModal } from './components/ManageModal';
 import { DirectoryModal } from './components/DirectoryModal';
 import { Footer } from './components/Footer';
+import ctbLogo from './Final-CTB LOGO-03.png';
 
 import { DEPARTMENTS, INITIAL_LINKS, INITIAL_ANNOUNCEMENTS, DIRECTORY_CONTACTS } from './data/initialData';
 import { AppScriptLink, Announcement, DepartmentId } from './types';
@@ -125,6 +126,11 @@ export default function App() {
     <div className="min-h-screen relative flex flex-col bg-[#030712] text-white selection:bg-cyan-500 selection:text-slate-950 font-sans overflow-x-hidden">
       <div className="mesh-bg"></div>
       <div className="river-flow"></div>
+      
+      {/* Background Watermark */}
+      <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-[-15] opacity-[0.035] select-none">
+        <img src={ctbLogo} alt="CTB Logo Watermark" className="w-[600px] max-w-[85vw] object-contain animate-float" />
+      </div>
       
       {/* Sticky Header */}
       <Header
