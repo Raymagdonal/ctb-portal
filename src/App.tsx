@@ -201,12 +201,12 @@ export default function App() {
           </div>
         ) : selectedDept === 'all' && !searchQuery ? (
           /* Sidebar Split Layout */
-          <div className="mx-auto max-w-7xl rounded-3xl overflow-hidden flex flex-col md:flex-row min-h-[580px] w-full border border-blue-900/50 bg-[#081329] shadow-2xl animate-fade-in">
-            <div className="w-full md:w-80 bg-[#040a17] p-5 md:p-6 border-b md:border-b-0 md:border-r border-blue-900/50 space-y-3 shrink-0 flex flex-col shadow-xl">
-              <div className="px-2 py-2 text-xs font-bold tracking-wider uppercase text-cyan-400 border-b border-blue-900/30 pb-3 mb-2">
+          <div className="mx-auto max-w-7xl rounded-3xl overflow-hidden flex flex-col md:flex-row min-h-[580px] w-full border border-blue-200/30 shadow-2xl animate-fade-in" style={{background: '#0f2040'}}>
+            <div className="w-full md:w-72 p-5 md:p-6 border-b md:border-b-0 md:border-r shrink-0 flex flex-col shadow-xl" style={{background: '#ffffff', borderColor: '#cbd5e1'}}>
+              <div className="px-2 py-2 text-xs font-bold tracking-wider uppercase border-b pb-3 mb-3" style={{color: '#1e40af', borderColor: '#e2e8f0'}}>
                 หมวดแผนกงาน ({DEPARTMENTS.length})
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {DEPARTMENTS.map((dept) => {
                   const deptLinks = filteredLinks.filter((l) => l.departmentId === dept.id);
                   const isActive = (activeSidebarDept || 'company') === dept.id;
@@ -214,23 +214,16 @@ export default function App() {
                     <button
                       key={dept.id}
                       onClick={() => setActiveSidebarDept(dept.id)}
-                      className={`w-full p-3 rounded-2xl flex items-center justify-between text-left transition-all ${
-                        isActive
-                          ? 'bg-[#1e40af] text-white border border-[#3b82f6] shadow-lg shadow-blue-500/20 pl-4'
-                          : 'bg-[#0a1224] hover:bg-[#111e3b] text-blue-200 border border-blue-900/20'
-                      }`}
+                      style={isActive ? {background: '#1e40af', color: '#ffffff', border: '1px solid #3b82f6'} : {background: '#f1f5f9', color: '#1e293b', border: '1px solid #e2e8f0'}}
+                      className={`w-full p-3 rounded-xl flex items-center justify-between text-left transition-all hover:opacity-90`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className={`p-2 rounded-xl shrink-0 ${
-                          isActive ? 'bg-blue-500 text-white' : 'bg-blue-950/80 text-blue-400 border border-blue-900/30'
-                        }`}>
+                        <div style={isActive ? {background: '#3b82f6', color: '#fff', padding: '6px', borderRadius: '10px'} : {background: '#dbeafe', color: '#1d4ed8', padding: '6px', borderRadius: '10px'}}>
                           <IconRenderer name={dept.iconName} className="w-4 h-4" />
                         </div>
                         <span className="text-sm font-semibold truncate">{dept.name}</span>
                       </div>
-                      <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${
-                        isActive ? 'bg-white text-blue-900 font-bold' : 'bg-blue-950/90 text-blue-300 border border-blue-900/40'
-                      }`}>
+                      <span style={isActive ? {background: '#ffffff', color: '#1e40af', padding: '1px 8px', borderRadius: '99px', fontWeight: 700, fontSize: '12px'} : {background: '#e0e7ff', color: '#1e40af', padding: '1px 8px', borderRadius: '99px', fontSize: '12px'}}>
                         {deptLinks.length}
                       </span>
                     </button>
