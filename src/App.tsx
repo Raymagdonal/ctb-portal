@@ -123,13 +123,13 @@ export default function App() {
   }, [links]);
 
   return (
-    <div className="min-h-screen relative flex flex-col bg-[#030712] text-white selection:bg-cyan-500 selection:text-slate-950 font-sans overflow-x-hidden">
+    <div className="min-h-screen relative flex flex-col bg-transparent text-white selection:bg-cyan-500 selection:text-slate-950 font-sans overflow-x-hidden">
       <div className="mesh-bg"></div>
       <div className="river-flow"></div>
       
       {/* Background Watermark */}
-      <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-[-15] opacity-[0.035] select-none">
-        <img src={ctbLogo} alt="CTB Logo Watermark" className="w-[600px] max-w-[85vw] object-contain animate-float" />
+      <div className="fixed inset-0 flex items-center justify-center pointer-events-none select-none" style={{zIndex: 0, opacity: 0.04}}>
+        <img src={ctbLogo} alt="" className="w-[600px] max-w-[85vw] object-contain animate-float" draggable="false" />
       </div>
       
       {/* Sticky Header */}
@@ -174,7 +174,7 @@ export default function App() {
         </div>
 
         {/* Always-Visible Sidebar Split Layout */}
-        <div className="rounded-3xl overflow-hidden flex flex-col md:flex-row w-full border shadow-2xl animate-fade-in" style={{minHeight: '600px', background: '#0b0f1a', borderColor: 'rgba(255,255,255,0.06)'}}>
+        <div className="rounded-3xl overflow-hidden flex flex-col md:flex-row w-full border shadow-2xl animate-fade-in" style={{minHeight: '600px', background: 'rgba(10, 30, 61, 0.6)', borderColor: 'rgba(255,255,255,0.1)'}}>
 
           {/* === LEFT SIDEBAR — always visible === */}
           <div className="w-full md:w-72 p-5 md:p-6 border-b md:border-b-0 md:border-r shrink-0 flex flex-col gap-2" style={{background: '#ffffff', borderColor: '#e2e8f0'}}>
@@ -215,7 +215,7 @@ export default function App() {
           </div>
 
           {/* === RIGHT CONTENT PANEL === */}
-          <div className="flex-1 p-6 sm:p-8 md:p-10 overflow-y-auto" style={{background: '#090d16'}}>
+          <div className="flex-1 p-6 sm:p-8 md:p-10 overflow-y-auto" style={{background: 'rgba(6, 20, 48, 0.5)'}}>
             {searchQuery ? (
               /* Search Results Mode */
               filteredLinks.length === 0 ? (

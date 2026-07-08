@@ -10,7 +10,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDirectory, onOpenManage })
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-20 border-t border-slate-800/80 text-slate-400 text-xs py-10 transition-colors" style={{background: '#0b0f1a'}}>
+    <footer className="mt-20 border-t border-white/10 text-slate-300 text-xs py-10 transition-colors" style={{background: 'rgba(6, 20, 48, 0.7)'}}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
         
         {/* Brand & Copyright */}

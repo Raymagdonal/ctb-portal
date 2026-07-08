@@ -50,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-md border-b border-[#1e293b]/80 shadow-2xl transition-all" style={{background: 'rgba(11, 15, 26, 0.8)'}}>
+    <header className="sticky top-0 z-40 backdrop-blur-md border-b border-white/10 shadow-2xl transition-all" style={{background: 'rgba(15, 40, 71, 0.85)'}}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
         
         {/* Brand Logo & Company Title */}
